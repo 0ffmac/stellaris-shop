@@ -16,6 +16,7 @@ const DEFAULT_SKINS: SkinPreset[] = [
   { id: "default", name: "Classic Lantern", url: "/assets/skins/skin.png" },
   { id: "skin1", name: "Crimson Ember", url: "/assets/skins/skin1.png" },
   { id: "skin2", name: "Deep Azure", url: "/assets/skins/skin2.png" },
+  { id: "skin3", name: "Solar Gold", url: "/assets/skins/skin3.png" },
 ];
 
 export function HeroSection() {
