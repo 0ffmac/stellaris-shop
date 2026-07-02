@@ -38,6 +38,7 @@ export function useStarViewer({
   const keyLightRef = useRef<THREE.DirectionalLight | null>(null);
   const fillLightRef = useRef<THREE.DirectionalLight | null>(null);
   const textureLoaderRef = useRef(new THREE.TextureLoader());
+  const lightOnRef = useRef(false);
 
   // Refs for animation loop to avoid stale closures on preset changes
   const autoRotateRef = useRef(scenePreset.autoRotate);
@@ -275,10 +276,22 @@ export function useStarViewer({
   // ── Update material ──────────────────────────────────────────────────────
   useEffect(() => {
     if (!materialRef.current) return;
-    materialRef.current.roughness = materialSettings.roughness;
-    materialRef.current.metalness = materialSettings.metalness;
-    materialRef.current.wireframe = materialSettings.wireframe;
-    materialRef.current.emissiveIntensity = materialSettings.glow;
+    const mat = materialRef.current;
+    mat.roughness = materialSettings.roughness;
+    mat.metalness = materialSettings.metalness;
+    mat.wireframe = materialSettings.wireframe;
+    lightOnRef.current = materialSettings.lightOn;
+
+    if (materialSettings.lightOn && mat.map) {
+      mat.emissive = new THREE.Color("#ff8844");
+      mat.emissiveMap = mat.map;
+      mat.emissiveIntensity = materialSettings.glow;
+    } else {
+      mat.emissive = new THREE.Color(0x000000);
+      mat.emissiveMap = null;
+      mat.emissiveIntensity = 0;
+    }
+    mat.needsUpdate = true;
   }, [materialSettings]);
 
   // ── Update texture ────────────────────────────────────────────────────────
@@ -293,8 +306,12 @@ export function useStarViewer({
         texture.wrapT = THREE.ClampToEdgeWrapping;
         materialRef.current?.map?.dispose();
         if (materialRef.current) {
-          materialRef.current.map = texture;
-          materialRef.current.needsUpdate = true;
+          const mat = materialRef.current;
+          mat.map = texture;
+          if (lightOnRef.current) {
+            mat.emissiveMap = texture;
+          }
+          mat.needsUpdate = true;
         }
       }
     );

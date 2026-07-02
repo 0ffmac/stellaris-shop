@@ -3,6 +3,7 @@ export interface MaterialSettings {
   metalness: number;
   glow: number;
   wireframe: boolean;
+  lightOn: boolean;
 }
 
 export interface ScenePreset {

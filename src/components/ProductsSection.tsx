@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ShoppingBag, Sparkles } from "lucide-react";
 import { StarViewer } from "@/components/StarViewer";
+import type { MaterialSettings } from "@/types/scene";
 
 const products = [
   {
@@ -34,9 +35,9 @@ const products = [
 ];
 
 const materialPresets = [
-  { roughness: 0.35, metalness: 0.25, glow: 0.08, wireframe: false },
-  { roughness: 0.40, metalness: 0.30, glow: 0.12, wireframe: false },
-  { roughness: 0.30, metalness: 0.20, glow: 0.05, wireframe: false },
+  { roughness: 0.35, metalness: 0.25, glow: 0.08, wireframe: false, lightOn: false },
+  { roughness: 0.40, metalness: 0.30, glow: 0.12, wireframe: false, lightOn: false },
+  { roughness: 0.30, metalness: 0.20, glow: 0.05, wireframe: false, lightOn: false },
 ];
 
 export function ProductsSection() {
@@ -84,7 +85,7 @@ function ProductCard({
 }: {
   product: (typeof products)[0];
   index: number;
-  material: { roughness: number; metalness: number; glow: number; wireframe: boolean };
+  material: MaterialSettings;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -148,7 +149,7 @@ function StarViewerCard({
   material,
 }: {
   skin: string;
-  material: { roughness: number; metalness: number; glow: number; wireframe: boolean };
+  material: MaterialSettings;
 }) {
   const scene = {
     id: "product",

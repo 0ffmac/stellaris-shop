@@ -3,14 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { StarViewer } from "@/components/StarViewer";
 import { scenePresets } from "@/scenes/presets";
 import type { SkinPreset } from "@/types/scene";
-import { ChevronDown, Sun, Upload, Trash2, Play, Pause } from "lucide-react";
-
-const heroMaterial = {
-  roughness: 0.35,
-  metalness: 0.25,
-  glow: 0.08,
-  wireframe: false,
-};
+import { ChevronDown, Sun, Upload, Trash2, Play, Pause, Lightbulb } from "lucide-react";
 
 const DEFAULT_SKINS: SkinPreset[] = [
   { id: "default", name: "Classic Lantern", url: "/assets/skins/skin.png" },
@@ -25,6 +18,16 @@ export function HeroSection() {
   const [skins, setSkins] = useState<SkinPreset[]>(DEFAULT_SKINS);
   const [activeSkinId, setActiveSkinId] = useState(DEFAULT_SKINS[0].id);
   const [paused, setPaused] = useState(false);
+  const [lightOn, setLightOn] = useState(false);
+  const [brightness, setBrightness] = useState(0.6);
+
+  const heroMaterial = {
+    roughness: 0.35,
+    metalness: 0.25,
+    glow: lightOn ? brightness : 0,
+    wireframe: false,
+    lightOn,
+  };
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -192,7 +195,7 @@ export function HeroSection() {
             </label>
           </div>
 
-          {/* Row 2: Play/Pause + Scene Selector */}
+          {/* Row 2: Play/Pause + Scene Selector + Light */}
           <div className="flex items-center gap-2 overflow-x-auto">
             <button
               onClick={() => setPaused(!paused)}
@@ -218,6 +221,32 @@ export function HeroSection() {
                 </button>
               ))}
             </div>
+
+            <div className="w-px h-5 bg-stone-800 shrink-0" />
+
+            <button
+              onClick={() => setLightOn(!lightOn)}
+              className={`shrink-0 flex items-center gap-1 px-3 py-2 rounded-lg border transition cursor-pointer ${
+                lightOn
+                  ? "bg-amber-900/30 text-amber-300 border-amber-700/40"
+                  : "bg-stone-800/60 text-stone-500 hover:text-stone-300 border-stone-700/60 hover:bg-stone-700"
+              }`}
+              title="Toggle inner light"
+            >
+              <Lightbulb className={`w-3.5 h-3.5 ${lightOn ? "text-amber-400" : ""}`} />
+            </button>
+
+            {lightOn && (
+              <input
+                type="range"
+                min="0"
+                max="1.2"
+                step="0.01"
+                value={brightness}
+                onChange={(e) => setBrightness(parseFloat(e.target.value))}
+                className="w-20 accent-amber-500 h-1 bg-stone-800 rounded-lg appearance-none cursor-pointer shrink-0"
+              />
+            )}
           </div>
         </div>
 
@@ -255,6 +284,34 @@ export function HeroSection() {
               </button>
             ))}
           </div>
+
+          <div className="w-px h-6 bg-stone-800 shrink-0" />
+
+          {/* Inner Light */}
+          <button
+            onClick={() => setLightOn(!lightOn)}
+            className={`shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg border transition cursor-pointer ${
+              lightOn
+                ? "bg-amber-900/30 text-amber-300 border-amber-700/40"
+                : "bg-stone-800/60 text-stone-500 hover:text-stone-300 border-stone-700/60 hover:bg-stone-700"
+            }`}
+            title="Toggle inner light"
+          >
+            <Lightbulb className={`w-3.5 h-3.5 ${lightOn ? "text-amber-400" : ""}`} />
+            <span className="text-[10px] font-medium uppercase tracking-[0.1em]">Light</span>
+          </button>
+
+          {lightOn && (
+            <input
+              type="range"
+              min="0"
+              max="1.2"
+              step="0.01"
+              value={brightness}
+              onChange={(e) => setBrightness(parseFloat(e.target.value))}
+              className="w-16 accent-amber-500 h-1 bg-stone-800 rounded-lg appearance-none cursor-pointer shrink-0"
+            />
+          )}
 
           <div className="w-px h-6 bg-stone-800 shrink-0" />
 
