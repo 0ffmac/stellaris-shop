@@ -95,14 +95,14 @@ export function HeroSection() {
       {/* ── Text Content (overlaid on scene) ───────────────────────────────── */}
       <motion.div
         style={{ opacity: textOpacity }}
-        className="hidden sm:flex absolute inset-0 z-10 flex-col justify-center px-8 md:px-16 lg:px-20 pointer-events-none"
+        className="flex absolute inset-0 z-10 flex-col sm:justify-center justify-start sm:pt-0 pt-14 px-8 md:px-16 lg:px-20 pointer-events-none"
       >
         <div className="max-w-xl pointer-events-auto">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-xs uppercase tracking-[0.3em] text-amber-400/70 mb-4 font-sans"
+            className="hidden sm:block text-xs uppercase tracking-[0.3em] text-amber-400/70 mb-4 font-sans"
           >
             Luxury Celestial Objects
           </motion.p>
@@ -111,10 +111,10 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.35, ease: "easeOut" }}
-            className="font-display text-5xl md:text-7xl lg:text-8xl font-light text-stone-100 leading-tight"
+            className="font-display text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-light text-stone-100 leading-tight"
           >
             Celestial
-            <span className="block text-3xl md:text-4xl lg:text-5xl font-light text-stone-400 mt-2">
+            <span className="block sm:text-3xl md:text-4xl lg:text-5xl text-xl font-light text-stone-400 sm:mt-2 mt-1">
               Crafted for the Cosmos
             </span>
           </motion.h1>
@@ -123,7 +123,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            className="mt-6 max-w-sm text-stone-400 text-sm font-light leading-relaxed font-sans"
+            className="hidden sm:block mt-6 max-w-sm text-stone-400 text-sm font-light leading-relaxed font-sans"
           >
             An expression of quiet luxury. Each star is meticulously designed
             for those who command attention without seeking it.
@@ -133,7 +133,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.65, ease: "easeOut" }}
-            className="mt-8 flex flex-wrap gap-3"
+            className="hidden sm:flex mt-8 flex-wrap gap-3"
           >
             <a
               href="#products"

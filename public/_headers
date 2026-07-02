@@ -1,0 +1,9 @@
+# HTML must always be fresh (it references content-hashed JS/CSS)
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Static assets with content hashes in filenames are cacheable forever
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
