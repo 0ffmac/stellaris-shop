@@ -1,11 +1,9 @@
-import { useState, useRef, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { StarViewer } from "@/components/StarViewer";
-import { scenePresets } from "@/scenes/presets";
-import type { SkinPreset } from "@/types/scene";
-import { ChevronDown, Sun, Upload, Trash2, Play, Pause, Lightbulb } from "lucide-react";
+import { ChevronDown, Play, Pause, Lightbulb } from "lucide-react";
 
-const DEFAULT_SKINS: SkinPreset[] = [
+const DEFAULT_SKINS = [
   { id: "default", name: "Classic Lantern", url: "/assets/skins/skin.png" },
   { id: "skin1", name: "Crimson Ember", url: "/assets/skins/skin1.png" },
   { id: "skin2", name: "Deep Azure", url: "/assets/skins/skin2.png" },
@@ -14,12 +12,20 @@ const DEFAULT_SKINS: SkinPreset[] = [
 
 export function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
-  const [sceneId, setSceneId] = useState(scenePresets[0].id);
-  const [skins, setSkins] = useState<SkinPreset[]>(DEFAULT_SKINS);
   const [activeSkinId, setActiveSkinId] = useState(DEFAULT_SKINS[0].id);
   const [paused, setPaused] = useState(false);
   const [lightOn, setLightOn] = useState(false);
   const [brightness, setBrightness] = useState(0.6);
+
+  useEffect(() => {
+    const pickRandom = () => {
+      const i = Math.floor(Math.random() * DEFAULT_SKINS.length);
+      setActiveSkinId(DEFAULT_SKINS[i].id);
+    };
+    pickRandom();
+    const interval = setInterval(pickRandom, 3500);
+    return () => clearInterval(interval);
+  }, []);
 
   const heroMaterial = {
     roughness: 0.35,
@@ -36,46 +42,29 @@ export function HeroSection() {
   const parallaxScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
-  const rawScene =
-    scenePresets.find((s) => s.id === sceneId) || scenePresets[0];
   const activeScene = useMemo(
     () => ({
-      ...rawScene,
+      id: "studio",
+      name: "Studio",
+      description: "Clean neutral studio lighting",
+      backgroundColor: "#1c1c24",
+      ambientIntensity: 0.5,
+      ambientColor: "#ffffff",
+      keyLightIntensity: 2.0,
+      keyLightPosition: [-3, 5, 5] as [number, number, number],
+      keyLightColor: "#ffffff",
+      fillLightIntensity: 0.8,
+      fillLightPosition: [4, 1, 3] as [number, number, number],
+      fillLightColor: "#ffffff",
       cameraPosition: [-4, 0.4, 4.5] as [number, number, number],
-      modelPosition: [1.0, 0, 0] as [number, number, number],
+      modelPosition: [0, 0, 0] as [number, number, number],
       fov: 16,
-      autoRotate: paused ? false : rawScene.autoRotate,
+      autoRotate: !paused,
+      autoRotateSpeed: 1.0,
     }),
-    [rawScene, paused],
+    [paused],
   );
-  const activeSkin = skins.find((s) => s.id === activeSkinId) || skins[0];
-
-  const handleUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const objectUrl = URL.createObjectURL(file);
-    const newSkin: SkinPreset = {
-      id: `custom-${Date.now()}`,
-      name: file.name.split(".")[0].substring(0, 15) || "Custom",
-      url: objectUrl,
-      isCustom: true,
-    };
-    setSkins((prev) => [...prev, newSkin]);
-    setActiveSkinId(newSkin.id);
-    e.target.value = "";
-  }, []);
-
-  const handleDeleteSkin = useCallback(
-    (sid: string) => {
-      const skin = skins.find((s) => s.id === sid);
-      if (skin?.isCustom) URL.revokeObjectURL(skin.url);
-      const next = skins.filter((s) => s.id !== sid);
-      setSkins(next);
-      if (activeSkinId === sid)
-        setActiveSkinId(next[0]?.id || DEFAULT_SKINS[0].id);
-    },
-    [skins, activeSkinId],
-  );
+  const activeSkin = DEFAULT_SKINS.find((s) => s.id === activeSkinId) || DEFAULT_SKINS[0];
 
   return (
     <section
@@ -89,6 +78,7 @@ export function HeroSection() {
           textureUrl={activeSkin.url}
           scenePreset={activeScene}
           material={heroMaterial}
+          modelOffset={[0.6, 0, 0]}
         />
       </motion.div>
 
@@ -156,46 +146,8 @@ export function HeroSection() {
 
       {/* ── Bottom Controls Dock ───────────────────────────────────────────── */}
       <div className="absolute bottom-0 left-0 right-0 z-20 bg-stone-950/70 backdrop-blur-lg border-t border-stone-800/60">
-        {/* Mobile: two rows, skins first */}
+        {/* Mobile: single row */}
         <div className="flex sm:hidden flex-col gap-1.5 px-3 py-2">
-          {/* Row 1: Skins + Upload */}
-          <div className="flex items-center gap-2 overflow-x-auto">
-            {skins.map((skin) => {
-              const isActive = skin.id === activeSkinId;
-              return (
-                <button
-                  key={skin.id}
-                  onClick={() => setActiveSkinId(skin.id)}
-                  className={`relative shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                    isActive
-                      ? "border-amber-500 shadow-[0_0_10px_-2px_rgba(245,158,11,0.4)] scale-105"
-                      : "border-stone-700/60 hover:border-stone-600 opacity-60 hover:opacity-100"
-                  }`}
-                  title={skin.name}
-                >
-                  <img
-                    src={skin.url}
-                    alt={skin.name}
-                    className="w-14 h-10 object-cover bg-stone-800"
-                  />
-                  {skin.isCustom && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDeleteSkin(skin.id); }}
-                      className="absolute top-0.5 right-0.5 p-0.5 rounded bg-black/60 text-stone-300 hover:text-red-400 transition opacity-0 hover:opacity-100"
-                    >
-                      <Trash2 className="w-2.5 h-2.5" />
-                    </button>
-                  )}
-                </button>
-              );
-            })}
-            <label className="shrink-0 flex items-center gap-1 px-3 py-2.5 rounded-lg bg-stone-800/60 hover:bg-amber-800/50 border border-stone-700/60 hover:border-amber-700/50 text-xs font-medium text-stone-400 hover:text-amber-300 transition cursor-pointer">
-              <Upload className="w-3 h-3" />
-              <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
-            </label>
-          </div>
-
-          {/* Row 2: Play/Pause + Light + Scene Selector */}
           <div className="flex items-center gap-2 overflow-x-auto">
             <button
               onClick={() => setPaused(!paused)}
@@ -231,24 +183,6 @@ export function HeroSection() {
               />
             )}
 
-            <div className="w-px h-5 bg-stone-800 shrink-0" />
-
-            <div className="flex items-center gap-1.5 shrink-0">
-              <Sun className="w-3.5 h-3.5 text-amber-400/70" />
-              {scenePresets.map((scene) => (
-                <button
-                  key={scene.id}
-                  onClick={() => setSceneId(scene.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs uppercase tracking-[0.1em] font-sans font-medium transition-all duration-300 cursor-pointer ${
-                    sceneId === scene.id
-                      ? "bg-amber-800/30 text-amber-300 border border-amber-700/40"
-                      : "text-stone-500 hover:text-stone-300 border border-transparent"
-                  }`}
-                >
-                  {scene.name}
-                </button>
-              ))}
-            </div>
           </div>
         </div>
 
@@ -266,26 +200,6 @@ export function HeroSection() {
               <Pause className="w-3.5 h-3.5 text-amber-400" />
             )}
           </button>
-
-          <div className="w-px h-6 bg-stone-800 shrink-0" />
-
-          {/* Scene Selector */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <Sun className="w-3.5 h-3.5 text-amber-400/70" />
-            {scenePresets.map((scene) => (
-              <button
-                key={scene.id}
-                onClick={() => setSceneId(scene.id)}
-                className={`px-2.5 py-1 rounded-full text-[10px] uppercase tracking-[0.1em] font-sans font-medium transition-all duration-300 cursor-pointer ${
-                  sceneId === scene.id
-                    ? "bg-amber-800/30 text-amber-300 border border-amber-700/40"
-                    : "text-stone-500 hover:text-stone-300 border border-transparent"
-                }`}
-              >
-                {scene.name}
-              </button>
-            ))}
-          </div>
 
           <div className="w-px h-6 bg-stone-800 shrink-0" />
 
@@ -314,48 +228,6 @@ export function HeroSection() {
               className="w-16 accent-amber-500 h-1 bg-stone-800 rounded-lg appearance-none cursor-pointer shrink-0"
             />
           )}
-
-          <div className="w-px h-6 bg-stone-800 shrink-0" />
-
-          {/* Skin Thumbnails */}
-          <div className="flex items-center gap-2 overflow-x-auto">
-            {skins.map((skin) => {
-              const isActive = skin.id === activeSkinId;
-              return (
-                <button
-                  key={skin.id}
-                  onClick={() => setActiveSkinId(skin.id)}
-                  className={`relative shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                    isActive
-                      ? "border-amber-500 shadow-[0_0_10px_-2px_rgba(245,158,11,0.4)] scale-105"
-                      : "border-stone-700/60 hover:border-stone-600 opacity-60 hover:opacity-100"
-                  }`}
-                  title={skin.name}
-                >
-                  <img
-                    src={skin.url}
-                    alt={skin.name}
-                    className="w-12 h-8 object-cover bg-stone-800"
-                  />
-                  {skin.isCustom && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDeleteSkin(skin.id); }}
-                      className="absolute top-0.5 right-0.5 p-0.5 rounded bg-black/60 text-stone-300 hover:text-red-400 transition opacity-0 hover:opacity-100"
-                    >
-                      <Trash2 className="w-2.5 h-2.5" />
-                    </button>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Upload */}
-          <label className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-stone-800/60 hover:bg-amber-800/50 border border-stone-700/60 hover:border-amber-700/50 text-[10px] font-medium text-stone-400 hover:text-amber-300 transition cursor-pointer">
-            <Upload className="w-3 h-3" />
-            <span className="hidden sm:inline">Upload</span>
-            <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
-          </label>
 
           {/* Scene description (right side) */}
           <div className="shrink-0 ml-auto text-[10px] text-stone-600 font-sans">

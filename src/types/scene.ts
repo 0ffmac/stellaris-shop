@@ -38,4 +38,5 @@ export interface StarViewerProps {
   scenePreset: ScenePreset;
   material: MaterialSettings;
   className?: string;
+  modelOffset?: [number, number, number];
 }

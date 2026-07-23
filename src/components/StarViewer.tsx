@@ -1,11 +1,12 @@
 import { useStarViewer } from "@/hooks/useStarViewer";
 import type { StarViewerProps } from "@/types/scene";
 
-export function StarViewer({ textureUrl, scenePreset, material, className = "" }: StarViewerProps) {
+export function StarViewer({ textureUrl, scenePreset, material, className = "", modelOffset }: StarViewerProps) {
   const { containerRef, loading, progress, error } = useStarViewer({
     textureUrl,
     scenePreset,
     material,
+    modelOffset,
   });
 
   return (

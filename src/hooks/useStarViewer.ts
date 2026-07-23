@@ -8,6 +8,7 @@ interface UseStarViewerOptions {
   textureUrl: string;
   scenePreset: ScenePreset;
   material: MaterialSettings;
+  modelOffset?: [number, number, number];
 }
 
 interface UseStarViewerReturn {
@@ -21,6 +22,7 @@ export function useStarViewer({
   textureUrl,
   scenePreset,
   material: materialSettings,
+  modelOffset,
 }: UseStarViewerOptions): UseStarViewerReturn {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
@@ -104,7 +106,9 @@ export function useStarViewer({
 
     // Model group
     const group = new THREE.Group();
-    group.position.set(...(scenePreset.modelPosition ?? [0, 0, 0]));
+    const base = scenePreset.modelPosition ?? [0, 0, 0] as [number, number, number];
+    const off = modelOffset ?? [0, 0, 0];
+    group.position.set(base[0] + off[0], base[1] + off[1], base[2] + off[2]);
     scene.add(group);
     modelGroupRef.current = group;
 
@@ -252,8 +256,10 @@ export function useStarViewer({
     if (controlsRef.current && scenePreset.modelPosition) {
       controlsRef.current.target.set(...scenePreset.modelPosition);
     }
-    if (modelGroupRef.current && scenePreset.modelPosition) {
-      modelGroupRef.current.position.set(...scenePreset.modelPosition);
+    if (modelGroupRef.current) {
+      const base = scenePreset.modelPosition ?? [0, 0, 0] as [number, number, number];
+      const off = modelOffset ?? [0, 0, 0];
+      modelGroupRef.current.position.set(base[0] + off[0], base[1] + off[1], base[2] + off[2]);
     }
     if (ambientLightRef.current) {
       ambientLightRef.current.color.set(scenePreset.ambientColor);
