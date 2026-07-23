@@ -22,7 +22,7 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              <span className="font-display text-lg tracking-wider text-stone-100">Stellaris</span>
+              <span className="font-display text-lg tracking-wider text-stone-100">Estrelles Studio</span>
             </div>
             <p className="text-sm text-stone-500 font-light leading-relaxed max-w-xs">
               Luxury celestial objects for the discerning. Crafted for those who
@@ -67,7 +67,7 @@ export function Footer() {
 
         <div className="pt-8 border-t border-stone-900/60 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-stone-600 font-light">
-            &copy; {new Date().getFullYear()} Stellaris Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Estrelles Studio Inc. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-stone-600">
             <a href="#" className="hover:text-stone-400 transition-colors">

@@ -37,13 +37,13 @@ export function AboutSection() {
       <div className="max-w-7xl mx-auto">
         <motion.div style={{ opacity, y }} className="text-center max-w-2xl mx-auto mb-20">
           <p className="text-xs uppercase tracking-[0.3em] text-amber-400/60 mb-4 font-sans">
-            About Stellaris
+            About Estrelles Studio
           </p>
           <h2 className="font-display text-4xl md:text-5xl font-light text-stone-100 mb-6">
             Defining Luxury Through Light
           </h2>
           <p className="text-stone-400 text-sm font-light leading-relaxed">
-            Stellaris is designed for those who command attention without seeking it.
+            Estrelles Studio is designed for those who command attention without seeking it.
             A reflection of nature&apos;s raw beauty, reimagined through the lens of
             modern design. Each piece tells a story of quiet confidence.
           </p>

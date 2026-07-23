@@ -2,43 +2,8 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ShoppingBag, Sparkles } from "lucide-react";
 import { StarViewer } from "@/components/StarViewer";
+import { products, getMaterial } from "@/data/products";
 import type { MaterialSettings } from "@/types/scene";
-
-const products = [
-  {
-    id: "classic",
-    name: "Classic Lantern",
-    tagline: "Timeless radiance",
-    description: "A warm, inviting glow that evokes the comfort of heritage craftsmanship.",
-    price: "$180",
-    skin: "/assets/skins/skin.png",
-    features: ["Warm Amber", "Matte Finish", "Hand-polished"],
-  },
-  {
-    id: "crimson",
-    name: "Crimson Ember",
-    tagline: "Bold intensity",
-    description: "Forged in fire, this star commands attention with its deep, smoldering hue.",
-    price: "$210",
-    skin: "/assets/skins/skin1.png",
-    features: ["Deep Crimson", "Satin Glow", "Limited Edition"],
-  },
-  {
-    id: "azure",
-    name: "Deep Azure",
-    tagline: "Oceanic calm",
-    description: "Cool and serene as the midnight sea. A statement of quiet confidence.",
-    price: "$195",
-    skin: "/assets/skins/skin2.png",
-    features: ["Ocean Blue", "Iridescent", "UV Reactive"],
-  },
-];
-
-const materialPresets = [
-  { roughness: 0.35, metalness: 0.25, glow: 0.08, wireframe: false, lightOn: false },
-  { roughness: 0.40, metalness: 0.30, glow: 0.12, wireframe: false, lightOn: false },
-  { roughness: 0.30, metalness: 0.20, glow: 0.05, wireframe: false, lightOn: false },
-];
 
 export function ProductsSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -70,7 +35,7 @@ export function ProductsSection() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {products.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} material={materialPresets[i]} />
+            <ProductCard key={product.id} product={product} index={i} material={getMaterial(i)} />
           ))}
         </div>
       </div>
@@ -107,7 +72,7 @@ function ProductCard({
         <StarViewerCard skin={product.skin} material={material} />
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent pointer-events-none" />
         <div className="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-stone-950/60 backdrop-blur border border-stone-800/60 text-[10px] font-sans text-amber-400/80">
-          {product.price}
+          {product.price}€
         </div>
       </div>
 

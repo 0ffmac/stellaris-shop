@@ -195,7 +195,7 @@ export function HeroSection() {
             </label>
           </div>
 
-          {/* Row 2: Play/Pause + Scene Selector + Light */}
+          {/* Row 2: Play/Pause + Light + Scene Selector */}
           <div className="flex items-center gap-2 overflow-x-auto">
             <button
               onClick={() => setPaused(!paused)}
@@ -204,23 +204,6 @@ export function HeroSection() {
             >
               {paused ? <Play className="w-3.5 h-3.5 text-emerald-400" /> : <Pause className="w-3.5 h-3.5 text-amber-400" />}
             </button>
-            <div className="w-px h-5 bg-stone-800 shrink-0" />
-            <div className="flex items-center gap-1.5 shrink-0">
-              <Sun className="w-3.5 h-3.5 text-amber-400/70" />
-              {scenePresets.map((scene) => (
-                <button
-                  key={scene.id}
-                  onClick={() => setSceneId(scene.id)}
-                  className={`px-3 py-1.5 rounded-full text-xs uppercase tracking-[0.1em] font-sans font-medium transition-all duration-300 cursor-pointer ${
-                    sceneId === scene.id
-                      ? "bg-amber-800/30 text-amber-300 border border-amber-700/40"
-                      : "text-stone-500 hover:text-stone-300 border border-transparent"
-                  }`}
-                >
-                  {scene.name}
-                </button>
-              ))}
-            </div>
 
             <div className="w-px h-5 bg-stone-800 shrink-0" />
 
@@ -247,6 +230,25 @@ export function HeroSection() {
                 className="w-20 accent-amber-500 h-1 bg-stone-800 rounded-lg appearance-none cursor-pointer shrink-0"
               />
             )}
+
+            <div className="w-px h-5 bg-stone-800 shrink-0" />
+
+            <div className="flex items-center gap-1.5 shrink-0">
+              <Sun className="w-3.5 h-3.5 text-amber-400/70" />
+              {scenePresets.map((scene) => (
+                <button
+                  key={scene.id}
+                  onClick={() => setSceneId(scene.id)}
+                  className={`px-3 py-1.5 rounded-full text-xs uppercase tracking-[0.1em] font-sans font-medium transition-all duration-300 cursor-pointer ${
+                    sceneId === scene.id
+                      ? "bg-amber-800/30 text-amber-300 border border-amber-700/40"
+                      : "text-stone-500 hover:text-stone-300 border border-transparent"
+                  }`}
+                >
+                  {scene.name}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

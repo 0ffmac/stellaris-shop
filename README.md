@@ -1,10 +1,10 @@
-# Stellaris — Luxury Celestial Objects Shop
+# Estrelles Studio — Luxury Celestial Objects Shop
 
 An interactive 3D e-commerce landing page for a luxury star shop, built with React, Three.js, and Tailwind CSS. Features a fully interactive 3D star viewer with customizable skins, lighting scene presets, and smooth scroll animations.
 
 ## Live Site
 
-https://stellaris-shop.pages.dev
+https://estrellesstudio.com
 
 ---
 
@@ -103,6 +103,26 @@ Three lighting environments are available, each providing a different visual moo
 
 Each preset controls: background color, all three light colors and intensities, light positions, camera position, auto-rotation speed, and field of view.
 
+### Products & Pricing
+
+The collection is defined in `src/data/products.ts` as an array of `Product` objects:
+
+```ts
+export interface Product {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  price: number;       // in €
+  skin: string;         // texture path
+  features: string[];
+}
+```
+
+Currently **21 products** are available — 3 signature stars (Classic Lantern 180€, Crimson Ember 210€, Deep Azure 195€) and 18 additional stars at 10€ each. Product data is fully decoupled from the UI: edit a single file to add, remove, or modify any star.
+
+Material presets cycle through 3 lighting variants automatically for visual variety across the collection.
+
 ### Hero Section
 
 The hero (`HeroSection.tsx`) is a full-screen layout:
@@ -123,10 +143,12 @@ The hero (`HeroSection.tsx`) is a full-screen layout:
 
 ```
 src/
+├── data/
+│   └── products.ts            # Product definitions (21 products, prices, skins, features)
 ├── types/
-│   └── scene.ts              # TypeScript interfaces (ScenePreset, SkinPreset, MaterialSettings, StarViewerProps)
+│   └── scene.ts               # TypeScript interfaces (ScenePreset, SkinPreset, MaterialSettings, StarViewerProps)
 ├── scenes/
-│   └── presets.ts             # Scene preset configurations (Studio, Living Room, Christmas)
+│   └── presets.ts              # Scene preset configurations (Studio, Living Room, Christmas)
 ├── hooks/
 │   └── useStarViewer.ts       # Three.js lifecycle hook (renderer, scene, camera, lights, model, animation loop, UV fix)
 └── components/
@@ -141,20 +163,24 @@ src/
 ### Data Flow
 
 ```
-ScenePreset[] ──→ HeroSection (selects active scene) ──→ StarViewer
-                                                              │
-SkinPreset[]  ──→ HeroSection (selects active skin) ────→ textureUrl prop
-                                                              │
-MaterialSettings ─→ heroMaterial constant ─────────────→ material prop
-                                                              │
-                                                              ▼
-                                                     useStarViewer hook
-                                                              │
-                                              ┌────────────────┼────────────────┐
-                                              ▼                ▼                ▼
-                                          Three.js       Animation        UV Fix
-                                          Renderer        Loop         (auto-detect
-                                                                      & recompute)
+Product[] ─────────→ ProductsSection ──→ ProductCard ──→ StarViewer
+                        │ (grid)              │
+                        │                     ├─ price (€)
+                        │                     ├─ features
+                        │                     └─ skin texture
+                        │
+ScenePreset[] ──→ HeroSection ──→ StarViewer (full-screen)
+SkinPreset[]  ──→ HeroSection ──→ textureUrl prop
+MaterialSettings ─→ heroMaterial ──→ material prop (hero)
+                                        │
+                                        ▼
+                               useStarViewer hook
+                                        │
+                        ┌────────────────┼────────────────┐
+                        ▼                ▼                ▼
+                    Three.js       Animation        UV Fix
+                    Renderer        Loop         (auto-detect
+                                                & recompute)
 ```
 
 ---
@@ -249,10 +275,10 @@ The site is deployed on **Cloudflare Pages**.
 pnpm build
 
 # Deploy to production (requires wrangler login)
-npx wrangler pages deploy dist --project-name stellaris-shop --branch production
+npx wrangler pages deploy dist --project-name estrellesstudio --branch production
 
 # Deploy to preview
-npx wrangler pages deploy dist --project-name stellaris-shop --branch main
+npx wrangler pages deploy dist --project-name estrellesstudio --branch main
 ```
 
 ### Cache Configuration
@@ -264,9 +290,31 @@ A `public/_headers` file configures Cloudflare edge caching:
 
 ### Social Preview
 
-The `public/og-image.jpg` (1200×630, 275KB JPG) is used by Open Graph and Twitter Cards when the page is shared.
+The `public/og-image.jpg` (1200×630 JPG) is used by Open Graph and Twitter Cards when the page is shared.
 
 ---
+
+## Adding Products / Stars
+
+1. Open `src/data/products.ts`
+2. Add a new entry to the `STARS` array following the `Product` interface:
+
+```ts
+{
+  id: "new-star",
+  name: "Your Star Name",
+  tagline: "Short descriptor",
+  description: "A longer description of the product.",
+  price: 10,              // price in €
+  skin: "/assets/skins/your-texture.png",
+  features: ["Feature 1", "Feature 2"],
+}
+```
+
+3. If you have a custom skin texture, place the PNG in `public/assets/skins/`
+4. Optionally add the new skin to `DEFAULT_SKINS` in `src/components/HeroSection.tsx` to make it available in the hero viewer
+
+The grid layout uses 3 columns on desktop and wraps automatically — no other changes needed.
 
 ## Adding Skins
 
@@ -314,7 +362,7 @@ All presets render automatically in the scene selector UI.
 ## Project Structure
 
 ```
-stellaris-shop/
+estrellesstudio/
 ├── public/
 │   ├── assets/
 │   │   ├── models/
@@ -327,6 +375,8 @@ stellaris-shop/
 │   ├── _headers                 # Cloudflare Pages cache headers
 │   └── og-image.jpg             # Social preview image (1200×630)
 ├── src/
+│   ├── data/
+│   │   └── products.ts          # Product catalog (21 products, prices, skins)
 │   ├── types/scene.ts           # TypeScript interfaces
 │   ├── scenes/presets.ts        # Scene lighting presets
 │   ├── hooks/useStarViewer.ts   # Three.js lifecycle hook
