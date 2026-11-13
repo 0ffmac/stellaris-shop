@@ -1,84 +1,27 @@
-import { Sparkles } from "lucide-react";
-
-const footerLinks = [
-  { label: "Collection", href: "#products" },
-  { label: "About", href: "#about" },
-  { label: "Terms & Conditions", href: "#" },
-  { label: "Privacy Policy", href: "#" },
-];
-
-const socialLinks = [
-  { label: "Instagram", href: "#" },
-  { label: "X (Twitter)", href: "#" },
-  { label: "Facebook", href: "#" },
-];
+import { Instagram, Mail, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <footer className="bg-stone-950 border-t border-stone-900/60">
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-3 gap-10 mb-12">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span className="font-display text-lg tracking-wider text-stone-100">Estrelles Studio</span>
-            </div>
-            <p className="text-sm text-stone-500 font-light leading-relaxed max-w-xs">
-              Luxury celestial objects for the discerning. Crafted for those who
-              command attention without seeking it.
-            </p>
-          </div>
-
-          {/* Links */}
-          <div>
-            <h4 className="text-xs uppercase tracking-[0.2em] text-stone-400 mb-4 font-sans">Navigation</h4>
-            <ul className="space-y-2.5">
-              {footerLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-stone-500 hover:text-amber-400 transition-colors duration-300 font-light"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Social */}
-          <div>
-            <h4 className="text-xs uppercase tracking-[0.2em] text-stone-400 mb-4 font-sans">Connect</h4>
-            <ul className="space-y-2.5">
-              {socialLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-stone-500 hover:text-amber-400 transition-colors duration-300 font-light"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+    <footer className="bg-[#f1e8dc] px-5 pb-8 pt-12 text-[#334541] md:px-8">
+      <div className="mx-auto grid max-w-7xl gap-10 border-b border-[#d9cbbb] pb-10 md:grid-cols-[1.3fr_1fr_1fr]">
+        <div>
+          <Link to="/" className="flex items-center gap-2"><span className="brand-star">✳</span><span className="font-display text-3xl">Stellaris</span></Link>
+          <p className="mt-3 max-w-sm text-sm leading-6 text-[#827363]">Un universo de objetos artesanales, luz, color y pequeños rituales para hacer tuyos tus espacios.</p>
+        </div>
+        <div>
+          <h3 className="footer-heading">Explora</h3>
+          <div className="flex flex-col gap-2 text-sm text-[#786b5d]">
+            <Link to="/collection/stars/">Estrellas de papel</Link><Link to="/collection/lamps/">Lámparas turcas</Link><Link to="/collection/bracelets/">Pulseras y gemas</Link><Link to="/collection/incense/">Aromas y rituales</Link><Link to="/collection/textiles/">Tapices y textiles</Link>
           </div>
         </div>
-
-        <div className="pt-8 border-t border-stone-900/60 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-stone-600 font-light">
-            &copy; {new Date().getFullYear()} Estrelles Studio Inc. All rights reserved.
-          </p>
-          <div className="flex gap-6 text-xs text-stone-600">
-            <a href="#" className="hover:text-stone-400 transition-colors">
-              Terms &amp; Conditions
-            </a>
-            <a href="#" className="hover:text-stone-400 transition-colors">
-              Privacy Policy
-            </a>
-          </div>
+        <div>
+          <h3 className="footer-heading">Estamos cerca</h3>
+          <p className="text-sm leading-6 text-[#786b5d]">¿Tienes alguna pregunta sobre un producto o un pedido? Escríbenos y te ayudaremos.</p>
+          <div className="mt-4 flex gap-4 text-[#52645c]"><a href="mailto:hola@stellaris-shop.com" aria-label="Email"><Mail size={19}/></a><a href="#" aria-label="Instagram"><Instagram size={19}/></a></div>
         </div>
       </div>
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 pt-6 text-[10px] tracking-wide text-[#988875] sm:flex-row"><span>© {new Date().getFullYear()} Stellaris. Todos los derechos reservados.</span><span>Made with care · España</span></div>
     </footer>
   );
 }

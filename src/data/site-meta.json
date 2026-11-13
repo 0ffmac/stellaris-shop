@@ -1,0 +1,41 @@
+{
+  "siteUrl": "https://main.stellaris-shop.pages.dev",
+  "siteName": "Stellaris",
+  "default": {
+    "title": "Stellaris — Objetos con alma",
+    "description": "Estrellas de papel, lámparas turcas, gemas, aromas y objetos artesanales para dar personalidad a tus espacios. Descubre el universo Stellaris.",
+    "ogImage": "/og-image.jpg"
+  },
+  "categories": {
+    "stars": {
+      "name": "Estrellas de papel",
+      "title": "Estrellas de papel — Stellaris",
+      "description": "Descubre los 21 modelos de estrellas artesanales de papel de Stellaris. Diseños originales con distintos papeles, patrones y colores para decorar y regalar.",
+      "ogImage": "/assets/stars-og.jpg"
+    },
+    "lamps": {
+      "name": "Lámparas turcas",
+      "title": "Lámparas turcas — Stellaris",
+      "description": "Lámparas turcas de mosaico hechas a mano que llenan cada rincón de color, calidez y personalidad. Descubre la colección Stellaris.",
+      "ogImage": "/og-image.jpg"
+    },
+    "bracelets": {
+      "name": "Pulseras y gemas",
+      "title": "Pulseras y gemas — Stellaris",
+      "description": "Pulseras de cuentas y piedras naturales con colores, texturas e historias propias. Encuentra tu gema en Stellaris.",
+      "ogImage": "/og-image.jpg"
+    },
+    "incense": {
+      "name": "Aromas y rituales",
+      "title": "Aromas y rituales — Stellaris",
+      "description": "Incienso, salvia y palo santo para acompañar tus momentos de calma. Descubre los aromas y rituales de Stellaris.",
+      "ogImage": "/og-image.jpg"
+    },
+    "textiles": {
+      "name": "Tapices y textiles",
+      "title": "Tapices y textiles — Stellaris",
+      "description": "Tapices bordados y piezas textiles de inspiración hindú y bohemia para dar vida a tus paredes. Descubre la colección Stellaris.",
+      "ogImage": "/assets/tapices-og.jpg"
+    }
+  }
+}

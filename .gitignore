@@ -1,0 +1,20 @@
+# Dependencies and build output
+node_modules/
+dist/
+.wrangler/
+
+# OS files
+.DS_Store
+
+# Local-only image sources and generated product photography.
+# Keep these files on disk for local builds/deploys, but never commit them.
+design/
+public/assets/tapestries/
+public/assets/stars/
+public/assets/bracelets/
+public/assets/*.jpg
+public/assets/*.jpeg
+public/assets/*.png
+public/assets/*.webp
+public/assets/*.gif
+public/assets/*.avif

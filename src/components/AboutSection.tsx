@@ -1,93 +1,30 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Star, Shield, Gem } from "lucide-react";
+import { Heart, Leaf, Sparkles } from "lucide-react";
 
 const values = [
-  {
-    icon: Star,
-    title: "Artisanal Craft",
-    description:
-      "Each star is designed with meticulous attention to light, form, and material. A fusion of traditional artistry and modern precision.",
-  },
-  {
-    icon: Gem,
-    title: "Premium Materials",
-    description:
-      "We source the finest optical-grade materials to ensure each piece radiates with unparalleled clarity and depth.",
-  },
-  {
-    icon: Shield,
-    title: "Lifetime Guarantee",
-    description:
-      "Every celestial object is backed by our lifetime guarantee. Crafted to endure, designed to inspire.",
-  },
+  { icon: Heart, title: "Piezas con personalidad", text: "Una selección de objetos especiales, elegidos por sus materiales, colores y carácter." },
+  { icon: Leaf, title: "Belleza para tus espacios", text: "Texturas, luz y pequeños detalles que ayudan a crear rincones que se sienten tuyos." },
+  { icon: Sparkles, title: "El placer de regalar", text: "Ideas para sorprender con algo diferente, bonito y lleno de intención." },
 ];
 
 export function AboutSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "start center"],
-  });
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
-
   return (
-    <section id="about" ref={ref} className="relative bg-stone-950 py-28 px-6 border-t border-stone-900/60">
-      <div className="max-w-7xl mx-auto">
-        <motion.div style={{ opacity, y }} className="text-center max-w-2xl mx-auto mb-20">
-          <p className="text-xs uppercase tracking-[0.3em] text-amber-400/60 mb-4 font-sans">
-            About Estrelles Studio
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl font-light text-stone-100 mb-6">
-            Defining Luxury Through Light
-          </h2>
-          <p className="text-stone-400 text-sm font-light leading-relaxed">
-            Estrelles Studio is designed for those who command attention without seeking it.
-            A reflection of nature&apos;s raw beauty, reimagined through the lens of
-            modern design. Each piece tells a story of quiet confidence.
-          </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-3 gap-10">
-          {values.map((item, i) => (
-            <ValueCard key={item.title} item={item} index={i} />
+    <section id="about" className="section-pad bg-[#294541] text-[#f8f2e9]">
+      <div className="mx-auto max-w-7xl">
+        <div className="mx-auto mb-12 max-w-2xl text-center">
+          <p className="mb-3 text-[10px] uppercase tracking-[.25em] text-[#d6b58b]">La filosofía Stellaris</p>
+          <h2 className="font-display text-4xl leading-tight md:text-5xl">Objetos que hacen <em>hogar.</em></h2>
+          <p className="mt-4 text-sm leading-7 text-[#d6d1c6]">Nos inspira la belleza de los pequeños detalles: una luz cálida, una textura especial, una piedra con carácter o un objeto que te recuerda a alguien.</p>
+        </div>
+        <div className="grid gap-8 md:grid-cols-3">
+          {values.map(({ icon: Icon, title, text }) => (
+            <div key={title} className="border-t border-white/20 pt-6 text-center">
+              <Icon className="mx-auto mb-4 text-[#d6b58b]" size={25} strokeWidth={1.3}/>
+              <h3 className="font-display text-2xl">{title}</h3>
+              <p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-[#d6d1c6]">{text}</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function ValueCard({
-  item,
-  index,
-}: {
-  item: (typeof values)[0];
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "center center"],
-  });
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
-
-  return (
-    <motion.div
-      ref={ref}
-      style={{ opacity, y }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="text-center group"
-    >
-      <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-stone-900/80 border border-stone-800/60 group-hover:border-amber-800/40 transition-colors duration-500 mb-6">
-        <item.icon className="w-6 h-6 text-amber-500/60 group-hover:text-amber-400 transition-colors duration-500" />
-      </div>
-      <h3 className="font-display text-xl text-stone-200 mb-3">{item.title}</h3>
-      <p className="text-sm text-stone-500 font-light leading-relaxed max-w-xs mx-auto">
-        {item.description}
-      </p>
-    </motion.div>
   );
 }

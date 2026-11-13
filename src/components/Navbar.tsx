@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X, Search, ShoppingBag, Sparkles } from "lucide-react";
 
 const links = [
-  { href: "#hero", label: "Home" },
-  { href: "#products", label: "Collection" },
-  { href: "#about", label: "About" },
+  { to: "/#collection", label: "Colecciones" },
+  { to: "/#about", label: "Nuestra historia" },
 ];
 
 export function Navbar() {
@@ -13,81 +13,55 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <motion.nav
-      initial={{ y: -20, opacity: 0 }}
+    <motion.header
+      initial={{ y: -18, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-stone-950/80 backdrop-blur-xl border-b border-stone-800/60 shadow-lg"
-          : "bg-transparent"
+      transition={{ duration: 0.55 }}
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+        scrolled ? "border-[#ded2c3] bg-[#f7f2e9]/95 shadow-sm backdrop-blur-lg" : "border-[#e9dfd2] bg-[#fbf8f2]"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-        <a href="#hero" className="flex items-center gap-2 text-lg font-display tracking-wider text-stone-100">
-          <Sparkles className="w-4 h-4 text-amber-400" />
-          Estrelles Studio
-        </a>
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 md:px-8">
+        <Link to="/" className="group flex items-center gap-2.5" aria-label="Stellaris, inicio">
+          <span className="brand-star">✳</span>
+          <span className="flex flex-col leading-none">
+            <span className="font-display text-[1.85rem] tracking-tight text-[#253b39]">Stellaris</span>
+            <span className="mt-1 text-[9px] uppercase tracking-[.22em] text-[#8d7764]">Paper · Objects · Rituals</span>
+          </span>
+        </Link>
 
-        <div className="hidden md:flex items-center gap-8">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-xs uppercase tracking-[0.2em] text-stone-400 hover:text-amber-300 transition-colors duration-300"
-            >
-              {link.label}
-            </a>
-          ))}
-          <a
-            href="#products"
-            className="text-xs uppercase tracking-[0.15em] px-5 py-2 rounded-full border border-amber-700/50 text-amber-300 hover:bg-amber-900/30 hover:border-amber-600 transition-all duration-300"
-          >
-            Shop Now
-          </a>
+        <nav className="hidden items-center gap-8 lg:flex">
+          <Link to="/" className="nav-link">Inicio</Link>
+          {links.map((link) => <Link key={link.label} to={link.to} className="nav-link">{link.label}</Link>)}
+        </nav>
+
+        <div className="hidden items-center gap-4 text-[#354744] sm:flex">
+          <button className="icon-button" aria-label="Buscar (próximamente)" title="Búsqueda próximamente"><Search size={18}/></button>
+          <button className="icon-button" aria-label="Cesta (próximamente)" title="Cesta próximamente"><ShoppingBag size={18}/></button>
+          <span className="hidden text-[10px] uppercase tracking-widest text-[#8b7765] xl:inline">ES · EUR</span>
         </div>
 
-        <button onClick={() => setOpen(!open)} className="md:hidden text-stone-300">
-          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        <button onClick={() => setOpen(!open)} className="rounded-full p-2 text-[#354744] lg:hidden" aria-label={open ? "Cerrar menú" : "Abrir menú"}>
+          {open ? <X size={22}/> : <Menu size={22}/>}
         </button>
       </div>
-
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden overflow-hidden bg-stone-950/95 backdrop-blur-xl border-t border-stone-800/60"
-          >
-            <div className="px-6 py-4 flex flex-col gap-4">
-              {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="text-sm uppercase tracking-[0.15em] text-stone-400 hover:text-amber-300"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <a
-                href="#products"
-                onClick={() => setOpen(false)}
-                className="text-sm uppercase tracking-[0.15em] text-amber-300"
-              >
-                Shop Now
-              </a>
+          <motion.nav initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-[#e6dbce] bg-[#fbf8f2] lg:hidden">
+            <div className="flex flex-col gap-1 px-6 py-4">
+              <Link onClick={() => setOpen(false)} to="/" className="mobile-link">Inicio</Link>
+              {links.map((link) => <Link key={link.label} onClick={() => setOpen(false)} to={link.to} className="mobile-link">{link.label}</Link>)}
             </div>
-          </motion.div>
+          </motion.nav>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </motion.header>
   );
 }

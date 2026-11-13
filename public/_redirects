@@ -1,0 +1,3 @@
+# Product detail routes are rendered by the React app.
+# Category pages (/collection/:category/) stay as generated static HTML.
+/collection/*/* /index.html 200

@@ -2,6 +2,8 @@
 
 An interactive 3D e-commerce landing page for a luxury star shop, built with React, Three.js, and Tailwind CSS. Features a fully interactive 3D star viewer with customizable skins, lighting scene presets, and smooth scroll animations.
 
+> **Nota:** la versión actual de la tienda Stellaris (catálogo, fichas de producto y textos en español) está documentada en [README-STELLARIS-V2.md](./README-STELLARIS-V2.md). Las fotografías de producto nuevas no se versionan en Git; consulta la sección «Imágenes fuera de Git» de ese documento.
+
 ## Live Site
 
 https://estrellesstudio.com
